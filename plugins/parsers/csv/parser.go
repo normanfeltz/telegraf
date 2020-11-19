@@ -238,8 +238,11 @@ outer:
 				continue
 			}
 
-			// attempt type conversions
-			if iValue, err := strconv.ParseInt(value, 10, 64); err == nil {
+			// If column is the timestamp column, then keep fieldname as is.
+			// Else, attempt type conversions.
+			if fieldName == p.TimestampColumn {
+				recordFields[fieldName] = value
+			} else if iValue, err := strconv.ParseInt(value, 10, 64); err == nil {
 				recordFields[fieldName] = iValue
 			} else if fValue, err := strconv.ParseFloat(value, 64); err == nil {
 				recordFields[fieldName] = fValue
